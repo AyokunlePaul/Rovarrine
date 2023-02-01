@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package src;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "transactions/rpc";
+
+service TransactionService {
+  rpc RecordTransaction(RecordTransactionRequest) returns (RecordTransactionResponse);
+  rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse);
+}
+
+message RecordTransactionRequest {
+  double amount = 1;
+  string userId = 2;
+  google.protobuf.Timestamp date = 3;
+}
+
+message RecordTransactionResponse {
+  int64 status = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message GetTransactionsRequest {
+  string userId = 1;
+}
+
+message GetTransactionsResponse {
+  double amount = 1;
+  google.protobuf.Timestamp date = 3;
+}

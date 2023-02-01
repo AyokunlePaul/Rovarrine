@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package src;
-
-message Transaction {
-  double amount = 1;
-  string userId = 2;
-}

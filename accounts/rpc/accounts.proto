@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package src;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "accounts/rpc";
+
+service AccountService {
+  rpc CreateAccount(Account) returns (CreateAccountResponse);
+  rpc GetUserInformation(UserInformationRequest) returns (GetUserInformationResponse);
+}
+
+message Account {
+  string customerId = 1;
+  double initialCredit = 2;
+}
+
+message UserInformationRequest {
+  string userId = 1;
+}
+
+message CreateAccountResponse {
+  int64 status = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message TransactionsResponse {
+  double amount = 1;
+  google.protobuf.Timestamp date = 2;
+}
+
+message GetUserInformationResponse {
+  string name = 1;
+  string surname = 2;
+  string balance = 3;
+  repeated TransactionsResponse transactions = 4;
+}
