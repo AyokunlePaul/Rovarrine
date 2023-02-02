@@ -37,7 +37,7 @@ func (h *handler) CreateCurrentAccount(ctx *gin.Context) {
 		return
 	}
 
-	err = req.IsValidRequestData()
+	err = IsValidRequestData(req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, struct {
 			Success bool
@@ -48,13 +48,13 @@ func (h *handler) CreateCurrentAccount(ctx *gin.Context) {
 		})
 		return
 	}
-	customerId := req.Data["customer_id"].(string)
+	customerId := req["customer_id"].(string)
 	// Initial credit should be sent as kobo
-	initialCredit := req.Data["initial_credit"].(int64)
+	initialCredit := req["initial_credit"].(float64)
 
 	resp, err := h.Client.CreateAccount(context.Background(), &rpc.Account{
 		CustomerId:    customerId,
-		InitialCredit: float64(initialCredit / 100),
+		InitialCredit: initialCredit / 100,
 	})
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, struct {
