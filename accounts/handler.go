@@ -62,7 +62,7 @@ func (h *handler) CreateCurrentAccount(ctx *gin.Context) {
 			Message string
 		}{
 			Success: false,
-			Message: err.Error(),
+			Message: "we are currently experience a downtime - please try again later",
 		})
 		return
 	}

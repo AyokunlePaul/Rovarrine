@@ -7,10 +7,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type ServiceClient struct {
-	Client rpc.AccountServiceClient
-}
-
 func InitAccountService(config *AccountConfig) rpc.AccountServiceClient {
 	cc, err := grpc.Dial(config.SvcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

@@ -8,10 +8,12 @@ import (
 )
 
 func main() {
+	// Account client
 	r := gin.Default()
 	accounts.RegisterRoutes(r, &conf.AccountConfig{
-		AppName: "account-app",
-		SvcUrl:  "localhost:12290",
+		AppName:    "account-app",
+		SvcUrl:     "localhost:12290",
+		ServerPort: ":12290",
 	})
 
 	err := r.Run(":1122")
