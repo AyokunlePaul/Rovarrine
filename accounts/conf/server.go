@@ -7,6 +7,7 @@ import (
 	"github.com/goombaio/namegenerator"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -15,7 +16,7 @@ type Server struct {
 	Db   db.Database
 	Port string
 }
-git
+
 func InitializeServer(config *AccountConfig) *Server {
 	cache := db.NewInMemoryDatabase()
 	return &Server{
@@ -40,7 +41,11 @@ func (s *Server) CreateAccount(ctx context.Context, account *rpc.Account) (*rpc.
 
 	s.Db.CreateAccount(data)
 
-	return nil, nil
+	return &rpc.CreateAccountResponse{
+		Status:  http.StatusCreated,
+		Success: true,
+		Message: "customer account created successfully",
+	}, nil
 }
 
 func (s *Server) GetUserInformation(context.Context, *rpc.UserInformationRequest) (*rpc.GetUserInformationResponse, error) {

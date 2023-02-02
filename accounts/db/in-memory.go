@@ -25,7 +25,7 @@ func NewInMemoryDatabase() Database {
 				"id": {
 					Name:    "id",
 					Unique:  true,
-					Indexer: &memdb.StringFieldIndex{Field: "customer_id"},
+					Indexer: &memdb.StringFieldIndex{Field: "CustomerId"},
 				},
 			},
 		},
@@ -41,7 +41,7 @@ func (i *inMem) CreateAccount(customer Customer) {
 	txn := i.Database.Txn(true)
 	err := txn.Insert("users", customer)
 	if err != nil {
-		log.Fatalf("error saving data: %v\n", customer)
+		log.Fatalf("error saving data: %v\n", err)
 	}
 	txn.Commit()
 }
