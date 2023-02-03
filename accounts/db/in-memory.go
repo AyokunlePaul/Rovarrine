@@ -1,7 +1,6 @@
 package db
 
 import (
-	"Rovarrine/accounts/rpc"
 	"fmt"
 	"github.com/hashicorp/go-memdb"
 	"log"
@@ -46,6 +45,14 @@ func (i *inMem) CreateAccount(customer Customer) {
 	txn.Commit()
 }
 
-func (i *inMem) GetUserInformation(userId string) *rpc.GetUserInformationResponse {
-	return nil
+func (i *inMem) GetUserInformation(userId string) *Customer {
+	txn := i.Database.Txn(false)
+	defer txn.Abort()
+
+	scan, err := txn.First("users", "CustomerId", userId)
+	if err != nil {
+		return nil
+	}
+
+	return scan.(*Customer)
 }

@@ -1,7 +1,6 @@
 package rpc
 
 import (
-	"Rovarrine/transactions"
 	"Rovarrine/transactions/db"
 	"context"
 	"github.com/google/uuid"
@@ -13,11 +12,11 @@ type Server struct {
 	Port string
 }
 
-func InitializeServer(config *transactions.Config) *Server {
+func InitializeServer() *Server {
 	cache := db.NewInMemoryDatabase()
 	return &Server{
 		Db:   cache,
-		Port: config.Port,
+		Port: config().Port,
 	}
 }
 
@@ -36,6 +35,37 @@ func (s *Server) RecordTransaction(_ context.Context, req *RecordTransactionRequ
 	}, nil
 }
 
-func (s *Server) GetTransactions(context.Context, *GetTransactionsRequest) (*GetTransactionsResponse, error) {
-	return nil, nil
+func (s *Server) GetTransactions(_ context.Context, req *GetTransactionsRequest) (*GetTransactionsResponse, error) {
+	resp, err := s.Db.Get(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+	var txns []*Transaction
+
+	for _, txn := range resp {
+		txns = append(txns, ToRpcTransaction(txn))
+	}
+
+	return &GetTransactionsResponse{
+		Amount:       float64(calculateBalance(resp)),
+		Transactions: txns,
+		Date:         nil,
+	}, nil
 }
+
+func ToRpcTransaction(txn db.Transaction) *Transaction {
+	return &Transaction{
+		Id:     txn.TransactionId,
+		Amount: txn.Balance,
+	}
+}
+
+func calculateBalance(txns []db.Transaction) int64 {
+	amount := int64(0)
+	for _, txn := range txns {
+		amount += txn.Balance
+	}
+	return amount
+}
+
+func (s *Server) mustEmbedUnimplementedTransactionServiceServer() {}

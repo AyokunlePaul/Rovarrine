@@ -40,6 +40,7 @@ func (i *inMem) Create(transaction Transaction) {
 		fmt.Printf("error saving transaction data: %v", err)
 		return
 	}
+	txn.Commit()
 }
 
 func (i *inMem) Get(customerId string) (transactions []Transaction, err error) {
@@ -50,11 +51,8 @@ func (i *inMem) Get(customerId string) (transactions []Transaction, err error) {
 	if err != nil {
 		return
 	}
-	for {
-		if currTxn := scan.Next(); currTxn != nil {
-			transactions = append(transactions, currTxn.(Transaction))
-			break
-		}
+	for currTxn := scan.Next(); currTxn != nil; currTxn = scan.Next() {
+		transactions = append(transactions, currTxn.(Transaction))
 	}
 
 	return

@@ -2,13 +2,14 @@ package accounts
 
 import (
 	"Rovarrine/accounts/conf"
+	"Rovarrine/accounts/rpc"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterRoutes(r *gin.Engine, config *conf.AccountConfig) {
-	client := conf.InitAccountService(config)
+	client := rpc.InitAccountService(config)
 	handler := NewHandler(client)
 
 	r.POST("/create-account", handler.CreateCurrentAccount)
-	r.POST("/user/:user_id", handler.GetUserInformation)
+	r.GET("/user/:user_id", handler.GetUserInformation)
 }

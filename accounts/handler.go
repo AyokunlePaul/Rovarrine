@@ -79,7 +79,7 @@ func (h *handler) CreateCurrentAccount(ctx *gin.Context) {
 }
 
 func (h *handler) GetUserInformation(ctx *gin.Context) {
-	userId := ctx.Param("userId")
+	userId := ctx.Param("user_id")
 	if strings.TrimSpace(userId) == "" {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, struct {
 			Success bool
