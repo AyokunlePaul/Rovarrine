@@ -1,6 +1,6 @@
 package transactions
 
-type AccountConfig struct {
+type Config struct {
 	AppName string
 	Port    string
 }

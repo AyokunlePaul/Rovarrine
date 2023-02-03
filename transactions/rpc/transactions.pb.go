@@ -7,10 +7,6 @@
 package rpc
 
 import (
-	context "context"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -198,19 +194,75 @@ func (x *GetTransactionsRequest) GetUserId() string {
 	return ""
 }
 
+type Transaction struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id     string `protobuf:"bytes,1,opt,name=Id,proto3" json:"Id,omitempty"`
+	Amount int64  `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+}
+
+func (x *Transaction) Reset() {
+	*x = Transaction{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_transactions_rpc_transactions_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Transaction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Transaction) ProtoMessage() {}
+
+func (x *Transaction) ProtoReflect() protoreflect.Message {
+	mi := &file_transactions_rpc_transactions_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Transaction.ProtoReflect.Descriptor instead.
+func (*Transaction) Descriptor() ([]byte, []int) {
+	return file_transactions_rpc_transactions_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Transaction) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Transaction) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
 type GetTransactionsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Amount float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
-	Date   *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=date,proto3" json:"date,omitempty"`
+	Amount       float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	Transactions []*Transaction         `protobuf:"bytes,2,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	Date         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=date,proto3" json:"date,omitempty"`
 }
 
 func (x *GetTransactionsResponse) Reset() {
 	*x = GetTransactionsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transactions_rpc_transactions_proto_msgTypes[3]
+		mi := &file_transactions_rpc_transactions_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -223,7 +275,7 @@ func (x *GetTransactionsResponse) String() string {
 func (*GetTransactionsResponse) ProtoMessage() {}
 
 func (x *GetTransactionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_transactions_rpc_transactions_proto_msgTypes[3]
+	mi := &file_transactions_rpc_transactions_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -236,7 +288,7 @@ func (x *GetTransactionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTransactionsResponse.ProtoReflect.Descriptor instead.
 func (*GetTransactionsResponse) Descriptor() ([]byte, []int) {
-	return file_transactions_rpc_transactions_proto_rawDescGZIP(), []int{3}
+	return file_transactions_rpc_transactions_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetTransactionsResponse) GetAmount() float64 {
@@ -244,6 +296,13 @@ func (x *GetTransactionsResponse) GetAmount() float64 {
 		return x.Amount
 	}
 	return 0
+}
+
+func (x *GetTransactionsResponse) GetTransactions() []*Transaction {
+	if x != nil {
+		return x.Transactions
+	}
+	return nil
 }
 
 func (x *GetTransactionsResponse) GetDate() *timestamppb.Timestamp {
@@ -278,26 +337,33 @@ var file_transactions_rpc_transactions_proto_rawDesc = []byte{
 	0x22, 0x30, 0x0a, 0x16, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
 	0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73,
 	0x65, 0x72, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72,
-	0x49, 0x64, 0x22, 0x61, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a,
-	0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x01, 0x52, 0x06, 0x61,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2e, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52,
-	0x04, 0x64, 0x61, 0x74, 0x65, 0x32, 0xb6, 0x01, 0x0a, 0x12, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61,
-	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x52, 0x0a, 0x11,
-	0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x1d, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x54, 0x72,
-	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1e, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x4c, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1c, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61,
-	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x12,
-	0x5a, 0x10, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x72,
-	0x70, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x49, 0x64, 0x22, 0x35, 0x0a, 0x0b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x49,
+	0x64, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x97, 0x01, 0x0a, 0x17, 0x47, 0x65,
+	0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x01, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x34, 0x0a,
+	0x0c, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0c, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x12, 0x2e, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x64,
+	0x61, 0x74, 0x65, 0x32, 0xb6, 0x01, 0x0a, 0x12, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x52, 0x0a, 0x11, 0x52, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x1d, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x54, 0x72, 0x61, 0x6e,
+	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e,
+	0x2e, 0x73, 0x72, 0x63, 0x2e, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x54, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4c,
+	0x0a, 0x0f, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x12, 0x1b, 0x2e, 0x73, 0x72, 0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c,
+	0x2e, 0x73, 0x72, 0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x12, 0x5a, 0x10,
+	0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x72, 0x70, 0x63,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -312,26 +378,28 @@ func file_transactions_rpc_transactions_proto_rawDescGZIP() []byte {
 	return file_transactions_rpc_transactions_proto_rawDescData
 }
 
-var file_transactions_rpc_transactions_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_transactions_rpc_transactions_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_transactions_rpc_transactions_proto_goTypes = []interface{}{
 	(*RecordTransactionRequest)(nil),  // 0: src.RecordTransactionRequest
 	(*RecordTransactionResponse)(nil), // 1: src.RecordTransactionResponse
 	(*GetTransactionsRequest)(nil),    // 2: src.GetTransactionsRequest
-	(*GetTransactionsResponse)(nil),   // 3: src.GetTransactionsResponse
-	(*timestamppb.Timestamp)(nil),     // 4: google.protobuf.Timestamp
+	(*Transaction)(nil),               // 3: src.Transaction
+	(*GetTransactionsResponse)(nil),   // 4: src.GetTransactionsResponse
+	(*timestamppb.Timestamp)(nil),     // 5: google.protobuf.Timestamp
 }
 var file_transactions_rpc_transactions_proto_depIdxs = []int32{
-	4, // 0: src.RecordTransactionRequest.date:type_name -> google.protobuf.Timestamp
-	4, // 1: src.GetTransactionsResponse.date:type_name -> google.protobuf.Timestamp
-	0, // 2: src.TransactionService.RecordTransaction:input_type -> src.RecordTransactionRequest
-	2, // 3: src.TransactionService.GetTransactions:input_type -> src.GetTransactionsRequest
-	1, // 4: src.TransactionService.RecordTransaction:output_type -> src.RecordTransactionResponse
-	3, // 5: src.TransactionService.GetTransactions:output_type -> src.GetTransactionsResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	5, // 0: src.RecordTransactionRequest.date:type_name -> google.protobuf.Timestamp
+	3, // 1: src.GetTransactionsResponse.transactions:type_name -> src.Transaction
+	5, // 2: src.GetTransactionsResponse.date:type_name -> google.protobuf.Timestamp
+	0, // 3: src.TransactionService.RecordTransaction:input_type -> src.RecordTransactionRequest
+	2, // 4: src.TransactionService.GetTransactions:input_type -> src.GetTransactionsRequest
+	1, // 5: src.TransactionService.RecordTransaction:output_type -> src.RecordTransactionResponse
+	4, // 6: src.TransactionService.GetTransactions:output_type -> src.GetTransactionsResponse
+	5, // [5:7] is the sub-list for method output_type
+	3, // [3:5] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_transactions_rpc_transactions_proto_init() }
@@ -377,6 +445,18 @@ func file_transactions_rpc_transactions_proto_init() {
 			}
 		}
 		file_transactions_rpc_transactions_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Transaction); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_transactions_rpc_transactions_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetTransactionsResponse); i {
 			case 0:
 				return &v.state
@@ -395,7 +475,7 @@ func file_transactions_rpc_transactions_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_transactions_rpc_transactions_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -407,120 +487,4 @@ func file_transactions_rpc_transactions_proto_init() {
 	file_transactions_rpc_transactions_proto_rawDesc = nil
 	file_transactions_rpc_transactions_proto_goTypes = nil
 	file_transactions_rpc_transactions_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// TransactionServiceClient is the client API for TransactionService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type TransactionServiceClient interface {
-	RecordTransaction(ctx context.Context, in *RecordTransactionRequest, opts ...grpc.CallOption) (*RecordTransactionResponse, error)
-	GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*GetTransactionsResponse, error)
-}
-
-type transactionServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewTransactionServiceClient(cc grpc.ClientConnInterface) TransactionServiceClient {
-	return &transactionServiceClient{cc}
-}
-
-func (c *transactionServiceClient) RecordTransaction(ctx context.Context, in *RecordTransactionRequest, opts ...grpc.CallOption) (*RecordTransactionResponse, error) {
-	out := new(RecordTransactionResponse)
-	err := c.cc.Invoke(ctx, "/src.TransactionService/RecordTransaction", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *transactionServiceClient) GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*GetTransactionsResponse, error) {
-	out := new(GetTransactionsResponse)
-	err := c.cc.Invoke(ctx, "/src.TransactionService/GetTransactions", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// TransactionServiceServer is the server API for TransactionService service.
-type TransactionServiceServer interface {
-	RecordTransaction(context.Context, *RecordTransactionRequest) (*RecordTransactionResponse, error)
-	GetTransactions(context.Context, *GetTransactionsRequest) (*GetTransactionsResponse, error)
-}
-
-// UnimplementedTransactionServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedTransactionServiceServer struct {
-}
-
-func (*UnimplementedTransactionServiceServer) RecordTransaction(context.Context, *RecordTransactionRequest) (*RecordTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RecordTransaction not implemented")
-}
-func (*UnimplementedTransactionServiceServer) GetTransactions(context.Context, *GetTransactionsRequest) (*GetTransactionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTransactions not implemented")
-}
-
-func RegisterTransactionServiceServer(s *grpc.Server, srv TransactionServiceServer) {
-	s.RegisterService(&_TransactionService_serviceDesc, srv)
-}
-
-func _TransactionService_RecordTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RecordTransactionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServiceServer).RecordTransaction(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/src.TransactionService/RecordTransaction",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServiceServer).RecordTransaction(ctx, req.(*RecordTransactionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TransactionService_GetTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTransactionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServiceServer).GetTransactions(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/src.TransactionService/GetTransactions",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServiceServer).GetTransactions(ctx, req.(*GetTransactionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _TransactionService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "src.TransactionService",
-	HandlerType: (*TransactionServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "RecordTransaction",
-			Handler:    _TransactionService_RecordTransaction_Handler,
-		},
-		{
-			MethodName: "GetTransactions",
-			Handler:    _TransactionService_GetTransactions_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "transactions/rpc/transactions.proto",
 }

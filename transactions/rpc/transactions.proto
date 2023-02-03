@@ -27,7 +27,13 @@ message GetTransactionsRequest {
   string userId = 1;
 }
 
+message Transaction {
+  string Id = 1;
+  int64 amount = 2;
+}
+
 message GetTransactionsResponse {
   double amount = 1;
+  repeated Transaction transactions = 2;
   google.protobuf.Timestamp date = 3;
 }
